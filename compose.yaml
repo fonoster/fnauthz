@@ -1,14 +1,12 @@
 services: 
   fnauthz:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
     image: fonoster/fnauthz:latest
     restart: unless-stopped
     environment:
-      DATABASE_URL: ${IDENTITY_DATABASE_URL}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      IDENTITY_DATABASE_URL: ${IDENTITY_DATABASE_URL}
       CLOAK_ENCRYPTION_KEY: ${CLOAK_ENCRYPTION_KEY}
       LOGS_LEVEL: ${LOGS_LEVEL}
       LOGS_TRANSPORT: ${LOGS_TRANSPORT}
     expose:
-      - 50061
+      - 50071:50071

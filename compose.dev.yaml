@@ -1,0 +1,7 @@
+services: 
+  fnauthz:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 50071:50071

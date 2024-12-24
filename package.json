@@ -17,9 +17,6 @@
     "build": "tsc -b tsconfig.json",
     "clean": "rimraf ./dist node_modules tsconfig.tsbuildinfo"
   },
-  "bin": {
-    "fauthz": "./dist/server.js"
-  },
   "files": [
     "dist"
   ],
@@ -27,10 +24,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@fonoster/authz": "^0.8.15",
-    "@fonoster/common": "^0.8.15",
-    "@fonoster/identity": "^0.8.15",
-    "@fonoster/logger": "^0.8.15",
+    "@fonoster/authz": "^0.8.17",
+    "@fonoster/common": "^0.8.17",
+    "@fonoster/identity": "^0.8.17",
+    "@fonoster/logger": "^0.8.17",
     "pb-util": "^1.0.3",
     "stripe": "^17.5.0",
     "typescript": "^5.7.2"
