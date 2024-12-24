@@ -1,0 +1,59 @@
+{
+  "name": "@fonoster/fnauthz",
+  "version": "0.8.0",
+  "description": "Authorization module for Fonoster",
+  "author": "Pedro Sanders <psanders@fonoster.com>",
+  "homepage": "https://github.com/fonoster/fonoster#readme",
+  "license": "MIT",
+  "main": "dist/index",
+  "types": "dist/index",
+  "directories": {
+    "src": "src",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "LOGS_LEVEL=verbose nodemon --watch src src/server.ts",
+    "prebuild": "rimraf ./dist tsconfig.tsbuildinfo",
+    "build": "tsc -b tsconfig.json",
+    "clean": "rimraf ./dist node_modules tsconfig.tsbuildinfo"
+  },
+  "bin": {
+    "fauthz": "./dist/server.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@fonoster/authz": "^0.8.15",
+    "@fonoster/common": "^0.8.15",
+    "@fonoster/identity": "^0.8.15",
+    "@fonoster/logger": "^0.8.15",
+    "pb-util": "^1.0.3",
+    "stripe": "^17.5.0",
+    "typescript": "^5.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fonoster/fonoster.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fonoster/fonoster/issues"
+  },
+  "gitHead": "b3255c4512154c5bee506b234e966526f174cbec",
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "rimraf": "^6.0.1",
+    "tsx": "^4.19.2"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "./src/**"
+    ],
+    "ext": "ts",
+    "exec": "tsx",
+    "ignore": "**/*.d.ts"
+  }
+}
