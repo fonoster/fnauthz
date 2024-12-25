@@ -31,17 +31,15 @@ import { getExtended } from "./utils/getExtended";
 import { AccountType } from "./type";
 import { CREATE_CALL_METHOD, CREATE_WORKSPACE_METHOD } from "./consts";
 import { makeGetWorkspacesCount, makeAddBillingMeterEvent } from "./utils";
-
+import Stripe from 'stripe';
 import { STRIPE_SECRET_KEY } from "./envs";
 
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
 const getUserByWorkspaceAccessKeyId =
   createGetUserByWorkspaceAccessKeyId(prisma);
 const getWorkspacesCount = makeGetWorkspacesCount(prisma);
-
-const stripe = require("stripe");
 const addBillingMeterEvent = makeAddBillingMeterEvent(
-  stripe(STRIPE_SECRET_KEY)
+  new Stripe(STRIPE_SECRET_KEY!)
 );
 
 // TODO: Should use Zod to validate all the requests

@@ -22,4 +22,15 @@ enum AccountType {
   ADVANCED = "advanced"
 }
 
-export { AccountType };
+type StripeClient = {
+  billing: {
+    meterEvents: {
+      create: (params: {
+        event_name: string;
+        payload: { value: string; stripe_customer_id: string };
+      }) => Promise<unknown>;
+    };
+  };
+};
+
+export { AccountType, StripeClient };

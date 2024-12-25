@@ -17,11 +17,8 @@
  * limitations under the License.
  */
 import { assertEnvsAreSet } from "@fonoster/common";
-import { getLogger } from "@fonoster/logger";
 import { AuthzServer } from "@fonoster/authz";
 import { AuthzHandler } from "./AuthzHandler";
-
-const logger = getLogger({ service: "authz", filePath: __filename });
 
 assertEnvsAreSet([
   "CLOAK_ENCRYPTION_KEY",

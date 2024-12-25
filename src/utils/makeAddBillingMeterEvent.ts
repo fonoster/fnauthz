@@ -18,10 +18,11 @@
  */
 import { getLogger } from "@fonoster/logger";
 import { BILLING_METER_EVENT_NAME } from "../consts";
+import { StripeClient } from "../type";
 
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
 
-function makeAddBillingMeterEvent(stripe: any) {
+function makeAddBillingMeterEvent(stripe: StripeClient) {
   return async (params: { value: string; stripeCustomerId: string }) => {
     const { value, stripeCustomerId: stripe_customer_id } = params;
 
