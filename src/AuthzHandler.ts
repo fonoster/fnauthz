@@ -27,8 +27,7 @@ import {
   createGetUserByWorkspaceAccessKeyId,
   prisma
 } from "@fonoster/identity";
-import { getExtended } from "./utils/getExtended";
-import { AccountType } from "./type";
+import { AccountType, UserExtended } from "./type";
 import { CREATE_CALL_METHOD, CREATE_WORKSPACE_METHOD } from "./consts";
 import { makeGetWorkspacesCount, makeAddBillingMeterEvent } from "./utils";
 import Stripe from "stripe";
@@ -43,7 +42,6 @@ const addBillingMeterEvent = makeAddBillingMeterEvent(
 );
 
 // TODO: Should use Zod to validate all the requests
-// TODO: We should really do unit tests for this
 class AuthzHandler implements IAuthzHandler {
   // If calling is enabled the account is in good standing and the session is authorized
   async checkSessionAuthorized(request: VoiceRequest): Promise<boolean> {
@@ -59,11 +57,12 @@ class AuthzHandler implements IAuthzHandler {
       extended: user.extended
     });
 
-    return getExtended(user.extended)?.callingEnabled;
+    const userExtended = user?.extended as UserExtended;
+    return userExtended?.callingEnabled;
   }
 
   // PRO and ENTERPRISE accounts can use all methods as long as calling is enabled
-  // FREE accounts can only have 1 Domain and 1 Workspace
+  // STARTER accounts can only have 1 Domain and 1 Workspace
   async checkMethodAuthorized(
     request: CheckMethodAuthorizedRequest
   ): Promise<boolean> {
@@ -79,7 +78,8 @@ class AuthzHandler implements IAuthzHandler {
       extended: user?.extended
     });
 
-    const { accountType, callingEnabled } = getExtended(user.extended);
+    const userExtended = user?.extended as UserExtended;
+    const { accountType, callingEnabled } = userExtended;
     const { method } = request;
 
     if (method === CREATE_CALL_METHOD) {
@@ -97,7 +97,7 @@ class AuthzHandler implements IAuthzHandler {
 
     // TODO: Add check for CREATE_DOMAIN_METHOD
 
-    // All other methods are allowed for FREE accounts
+    // STARTER accounts have access to all other methods
     return true;
   }
 
@@ -116,16 +116,17 @@ class AuthzHandler implements IAuthzHandler {
       extended: user.extended
     });
 
-    const { stripeCustomerId } = user.extended as {
-      stripeCustomerId: string;
+    const { stripeCustomerId } = user.extended as UserExtended;
+
+    const { duration: value, identifier } = request.payload as {
+      identifier: string;
       duration: string;
     };
 
-    const { duration: value } = request.payload as { duration: string };
-
     await addBillingMeterEvent({
       stripeCustomerId,
-      value
+      value,
+      identifier
     });
   }
 }

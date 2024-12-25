@@ -22,15 +22,28 @@ enum AccountType {
   ADVANCED = "advanced"
 }
 
+type AddBillingMeterEventParams = {
+  value: string;
+  stripeCustomerId: string;
+  identifier: string;
+};
+
 type StripeClient = {
   billing: {
     meterEvents: {
       create: (params: {
         event_name: string;
         payload: { value: string; stripe_customer_id: string };
+        identifier?: string;
       }) => Promise<unknown>;
     };
   };
 };
 
-export { AccountType, StripeClient };
+type UserExtended = {
+  stripeCustomerId: string;
+  callingEnabled: boolean;
+  accountType: AccountType;
+};
+
+export { AddBillingMeterEventParams, AccountType, StripeClient, UserExtended };

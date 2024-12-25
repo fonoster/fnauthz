@@ -20,11 +20,11 @@ import { Prisma } from "@fonoster/identity";
 
 function makeGetWorkspacesCount(prisma: Prisma) {
   return async (ownerRef: string) => {
-    const workspace = await prisma.workspace.findMany({
+    const workspaces = await prisma.workspace.findMany({
       where: { ownerRef }
     });
 
-    return workspace ? workspace.length : 0;
+    return workspaces.length;
   };
 }
 
