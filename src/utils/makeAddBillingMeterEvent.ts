@@ -22,7 +22,7 @@ import { BILLING_METER_EVENT_NAME } from "../consts";
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
 
 function makeAddBillingMeterEvent(stripe: any) {
-  return async (params: { value: string, stripeCustomerId: string }) => {
+  return async (params: { value: string; stripeCustomerId: string }) => {
     const { value, stripeCustomerId: stripe_customer_id } = params;
 
     logger.verbose("addBillingMeterEvent called");
@@ -31,12 +31,12 @@ function makeAddBillingMeterEvent(stripe: any) {
       event_name: BILLING_METER_EVENT_NAME,
       payload: {
         value,
-        stripe_customer_id,
+        stripe_customer_id
       }
     });
 
     logger.info("billing meter event created", { meterEvent });
-  }
+  };
 }
 
 export { makeAddBillingMeterEvent };

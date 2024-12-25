@@ -16,11 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const CREATE_WORKSPACE_METHOD = "/fonoster.identity.v1beta2.Identity/CreateWorkspace";
+const CREATE_WORKSPACE_METHOD =
+  "/fonoster.identity.v1beta2.Identity/CreateWorkspace";
 const CREATE_CALL_METHOD = "/fonoster.calls.v1beta2.Calls/CreateCall";
 const CREATE_DOMAIN_METHOD = "/fonoster.domains.v1beta2.Domains/CreateDomain";
 const BILLING_METER_EVENT_NAME = "call_seconds";
 
 export {
-  CREATE_WORKSPACE_METHOD, CREATE_CALL_METHOD, CREATE_DOMAIN_METHOD, BILLING_METER_EVENT_NAME
+  CREATE_WORKSPACE_METHOD,
+  CREATE_CALL_METHOD,
+  CREATE_DOMAIN_METHOD,
+  BILLING_METER_EVENT_NAME
 };

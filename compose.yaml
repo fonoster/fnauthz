@@ -1,4 +1,4 @@
-services: 
+services:
   fnauthz:
     image: fonoster/fnauthz:latest
     restart: unless-stopped

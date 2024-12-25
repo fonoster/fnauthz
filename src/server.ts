@@ -24,8 +24,8 @@ import { AuthzHandler } from "./AuthzHandler";
 const logger = getLogger({ service: "authz", filePath: __filename });
 
 assertEnvsAreSet([
-  "CLOAK_ENCRYPTION_KEY", 
-  "IDENTITY_DATABASE_URL", 
+  "CLOAK_ENCRYPTION_KEY",
+  "IDENTITY_DATABASE_URL",
   "STRIPE_SECRET_KEY"
 ]);
 

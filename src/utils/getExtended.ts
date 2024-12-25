@@ -18,8 +18,11 @@
  */
 import { AccountType } from "../type";
 
-function getExtended(extended: unknown): { callingEnabled: boolean, accountType: AccountType } {
-  return extended as { callingEnabled: boolean, accountType: AccountType };
+function getExtended(extended: unknown): {
+  callingEnabled: boolean;
+  accountType: AccountType;
+} {
+  return extended as { callingEnabled: boolean; accountType: AccountType };
 }
 
 export { getExtended };

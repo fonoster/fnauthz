@@ -23,7 +23,10 @@ import {
   CheckMethodAuthorizedRequest,
   VoiceRequest
 } from "@fonoster/authz";
-import { createGetUserByWorkspaceAccessKeyId, prisma } from "@fonoster/identity";
+import {
+  createGetUserByWorkspaceAccessKeyId,
+  prisma
+} from "@fonoster/identity";
 import { getExtended } from "./utils/getExtended";
 import { AccountType } from "./type";
 import { CREATE_CALL_METHOD, CREATE_WORKSPACE_METHOD } from "./consts";
@@ -32,11 +35,14 @@ import { makeGetWorkspacesCount, makeAddBillingMeterEvent } from "./utils";
 import { STRIPE_SECRET_KEY } from "./envs";
 
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
-const getUserByWorkspaceAccessKeyId = createGetUserByWorkspaceAccessKeyId(prisma);
+const getUserByWorkspaceAccessKeyId =
+  createGetUserByWorkspaceAccessKeyId(prisma);
 const getWorkspacesCount = makeGetWorkspacesCount(prisma);
 
 const stripe = require("stripe");
-const addBillingMeterEvent = makeAddBillingMeterEvent(stripe(STRIPE_SECRET_KEY));
+const addBillingMeterEvent = makeAddBillingMeterEvent(
+  stripe(STRIPE_SECRET_KEY)
+);
 
 // TODO: Should use Zod to validate all the requests
 // TODO: We should really do unit tests for this
@@ -51,9 +57,11 @@ class AuthzHandler implements IAuthzHandler {
       return false;
     }
 
-    logger.verbose("checkSessionAuthorized user extended data", { extended: user.extended });
+    logger.verbose("checkSessionAuthorized user extended data", {
+      extended: user.extended
+    });
 
-    return (getExtended(user.extended))?.callingEnabled;
+    return getExtended(user.extended)?.callingEnabled;
   }
 
   // PRO and ENTERPRISE accounts can use all methods as long as calling is enabled
@@ -69,19 +77,24 @@ class AuthzHandler implements IAuthzHandler {
       return false;
     }
 
-    logger.verbose("checkMethodAuthorized user extended data", { extended: user?.extended });
+    logger.verbose("checkMethodAuthorized user extended data", {
+      extended: user?.extended
+    });
 
-    const { accountType, callingEnabled } = (getExtended(user.extended))
+    const { accountType, callingEnabled } = getExtended(user.extended);
     const { method } = request;
 
     if (method === CREATE_CALL_METHOD) {
       return callingEnabled;
-    } else if (accountType !== AccountType.STARTER && method !== CREATE_CALL_METHOD) {
+    } else if (
+      accountType !== AccountType.STARTER &&
+      method !== CREATE_CALL_METHOD
+    ) {
       return true;
     }
 
     if (method === CREATE_WORKSPACE_METHOD) {
-      return await getWorkspacesCount(user.ref) < 1;
+      return (await getWorkspacesCount(user.ref)) < 1;
     }
 
     // TODO: Add check for CREATE_DOMAIN_METHOD
@@ -101,10 +114,14 @@ class AuthzHandler implements IAuthzHandler {
       return;
     }
 
-    logger.verbose("addBillingMeterEvent user extended data", { extended: user.extended });
+    logger.verbose("addBillingMeterEvent user extended data", {
+      extended: user.extended
+    });
 
-    const { stripeCustomerId } = 
-      (user.extended as { stripeCustomerId: string, duration: string });
+    const { stripeCustomerId } = user.extended as {
+      stripeCustomerId: string;
+      duration: string;
+    };
 
     const { duration: value } = request.payload as { duration: string };
 

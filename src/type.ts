@@ -19,7 +19,7 @@
 enum AccountType {
   STARTER = "starter",
   PRO = "pro",
-  ADVANCED = "advanced",
+  ADVANCED = "advanced"
 }
 
 export { AccountType };

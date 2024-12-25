@@ -32,6 +32,5 @@ describe("@authz", function () {
     return sandbox.restore();
   });
 
-  it("needs tests", async function () {
-  });
+  it("needs tests", async function () {});
 });
