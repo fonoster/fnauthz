@@ -76,7 +76,7 @@ class AuthzHandler implements IAuthzHandler {
 
     if (method === CREATE_CALL_METHOD) {
       return callingEnabled;
-    } else if (accountType !== AccountType.FREE && method !== CREATE_CALL_METHOD) {
+    } else if (accountType !== AccountType.STARTER && method !== CREATE_CALL_METHOD) {
       return true;
     }
 

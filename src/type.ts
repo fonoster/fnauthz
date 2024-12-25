@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 enum AccountType {
-  FREE = "free",
+  STARTER = "starter",
   PRO = "pro",
-  ENTERPRISE = "enterprise"
+  ADVANCED = "advanced",
 }
 
 export { AccountType };
