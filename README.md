@@ -1,1 +1,3 @@
-Needs docs.
+[![Discord](https://img.shields.io/discord/1016419835455996076?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/4QWgSz4hTC) ![GitHub](https://img.shields.io/github/license/fonoster/fonoster?color=%2347b96d) ![Twitter Follow](https://img.shields.io/twitter/follow/fonoster?style=social)
+
+This module is part of the [Fonoster](https://fonoster.com) open-source. By itself, it does not do much. It is intended to be used as a dependency for other modules. For more information about the project, please visit [https://github.com/fonoster/fonoster](https://github.com/fonoster/fonoster).
