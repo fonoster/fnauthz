@@ -81,10 +81,7 @@ class AuthzHandler implements IAuthzHandler {
     }
 
     if (method === CREATE_WORKSPACE_METHOD) {
-      const workspacesCount = await getWorkspacesCount(user.ref);
-      console.log("workspacesCount", workspacesCount);
-
-      return workspacesCount < 1;
+      return await getWorkspacesCount(user.ref) < 1;
     }
 
     // TODO: Add check for CREATE_DOMAIN_METHOD
