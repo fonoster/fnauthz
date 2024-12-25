@@ -40,10 +40,4 @@ type StripeClient = {
   };
 };
 
-type UserExtended = {
-  stripeCustomerId: string;
-  callingEnabled: boolean;
-  accountType: AccountType;
-};
-
-export { AddBillingMeterEventParams, AccountType, StripeClient, UserExtended };
+export { AddBillingMeterEventParams, AccountType, StripeClient };

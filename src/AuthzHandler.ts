@@ -27,11 +27,17 @@ import {
   createGetUserByWorkspaceAccessKeyId,
   prisma
 } from "@fonoster/identity";
-import { AccountType, UserExtended } from "./type";
+import { AccountType } from "./type";
 import { CREATE_CALL_METHOD, CREATE_WORKSPACE_METHOD } from "./consts";
 import { makeGetWorkspacesCount, makeAddBillingMeterEvent } from "./utils";
 import Stripe from "stripe";
 import { STRIPE_SECRET_KEY } from "./envs";
+import {
+  addBillingMeterEventRequestSchema,
+  checkMethodAuthorizedRequestSchema,
+  userExtendedSchema,
+  voiceRequestSchema
+} from "./schema";
 
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
 const getUserByWorkspaceAccessKeyId =
@@ -41,24 +47,28 @@ const addBillingMeterEvent = makeAddBillingMeterEvent(
   new Stripe(STRIPE_SECRET_KEY!)
 );
 
-// TODO: Should use Zod to validate all the requests
 class AuthzHandler implements IAuthzHandler {
   // If calling is enabled the account is in good standing and the session is authorized
   async checkSessionAuthorized(request: VoiceRequest): Promise<boolean> {
     logger.verbose("checkSessionAuthorized called", request);
 
-    const user = await getUserByWorkspaceAccessKeyId(request.accessKeyId);
+    // Checks if request at leas has the accessKeyId
+    const parsedRequest = voiceRequestSchema.parse(request);
+
+    const user = await getUserByWorkspaceAccessKeyId(parsedRequest.accessKeyId);
 
     if (!user) {
       return false;
     }
 
+    // Checks if user has the extended field
+    const parsedUser = userExtendedSchema.parse(user);
+
     logger.verbose("checkSessionAuthorized user extended data", {
-      extended: user.extended
+      extended: parsedUser.extended
     });
 
-    const userExtended = user?.extended as UserExtended;
-    return userExtended?.callingEnabled;
+    return parsedUser.extended.callingEnabled;
   }
 
   // PRO and ENTERPRISE accounts can use all methods as long as calling is enabled
@@ -68,18 +78,23 @@ class AuthzHandler implements IAuthzHandler {
   ): Promise<boolean> {
     logger.verbose("checkMethodAuthorized called", request);
 
-    const user = await getUserByWorkspaceAccessKeyId(request.accessKeyId);
+    // Must have both accessKeyId and method
+    const parsedRequest = checkMethodAuthorizedRequestSchema.parse(request);
+
+    const user = await getUserByWorkspaceAccessKeyId(parsedRequest.accessKeyId);
 
     if (!user) {
       return false;
     }
 
+    // Checks if user has the extended field
+    const parsedUser = userExtendedSchema.parse(user);
+
     logger.verbose("checkMethodAuthorized user extended data", {
-      extended: user?.extended
+      extended: parsedUser.extended
     });
 
-    const userExtended = user?.extended as UserExtended;
-    const { accountType, callingEnabled } = userExtended;
+    const { accountType, callingEnabled } = parsedUser.extended;
     const { method } = request;
 
     if (method === CREATE_CALL_METHOD) {
@@ -92,7 +107,7 @@ class AuthzHandler implements IAuthzHandler {
     }
 
     if (method === CREATE_WORKSPACE_METHOD) {
-      return (await getWorkspacesCount(user.ref)) < 1;
+      return (await getWorkspacesCount(parsedUser.ref)) < 1;
     }
 
     // TODO: Add check for CREATE_DOMAIN_METHOD
@@ -105,18 +120,25 @@ class AuthzHandler implements IAuthzHandler {
     request: AddBillingMeterEventRequest
   ): Promise<void> {
     logger.verbose("addBillingMeterEvent called", request);
-    const user = await getUserByWorkspaceAccessKeyId(request.accessKeyId);
+
+    // Must have the accessKeyId and a payload with value, identifier and duration
+    const parsedRequest = addBillingMeterEventRequestSchema.parse(request);
+
+    const user = await getUserByWorkspaceAccessKeyId(parsedRequest.accessKeyId);
 
     if (!user) {
       logger.error("addBillingMeterEvent user not found", request);
       return;
     }
 
+    // Checks if user has the extended field
+    const parsedUser = userExtendedSchema.parse(user);
+
     logger.verbose("addBillingMeterEvent user extended data", {
-      extended: user.extended
+      extended: parsedUser.extended
     });
 
-    const { stripeCustomerId } = user.extended as UserExtended;
+    const { stripeCustomerId } = parsedUser.extended;
 
     const { duration: value, identifier } = request.payload as {
       identifier: string;
