@@ -31,7 +31,7 @@ import { getExtended } from "./utils/getExtended";
 import { AccountType } from "./type";
 import { CREATE_CALL_METHOD, CREATE_WORKSPACE_METHOD } from "./consts";
 import { makeGetWorkspacesCount, makeAddBillingMeterEvent } from "./utils";
-import Stripe from 'stripe';
+import Stripe from "stripe";
 import { STRIPE_SECRET_KEY } from "./envs";
 
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
