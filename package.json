@@ -15,7 +15,8 @@
     "start": "LOGS_LEVEL=verbose nodemon --watch src src/server.ts",
     "prebuild": "rimraf ./dist tsconfig.tsbuildinfo",
     "build": "tsc -b tsconfig.json",
-    "clean": "rimraf ./dist node_modules tsconfig.tsbuildinfo"
+    "clean": "rimraf ./dist node_modules tsconfig.tsbuildinfo",
+    "prepare": "husky"
   },
   "files": [
     "dist"
@@ -41,6 +42,9 @@
   },
   "gitHead": "b3255c4512154c5bee506b234e966526f174cbec",
   "devDependencies": {
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "husky": "^9.1.7",
     "nodemon": "^3.1.9",
     "rimraf": "^6.0.1",
     "tsx": "^4.19.2"
