@@ -16,24 +16,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { assertEnvsAreSet } from "@fonoster/common";
+import { assertEnvsAreSet, makeFetchSingleCallByCallId } from "@fonoster/common";
 import { AuthzServer } from "@fonoster/authz";
 import { AuthzHandler } from "./AuthzHandler";
 import { connect } from "nats";
 import { getLogger } from "@fonoster/logger";
-import { NATS_URL } from "./envs";
+import { INFLUXDB_TOKEN, INFLUXDB_URL, NATS_URL } from "./envs";
 import { ROUTR_CALL_SUBJECT } from "./consts";
 import { watchNatsStatus } from "./utils/watchNatsStatus";
+import { InfluxDB } from "@influxdata/influxdb-client";
 
 assertEnvsAreSet([
   "CLOAK_ENCRYPTION_KEY",
   "IDENTITY_DATABASE_URL",
   "STRIPE_SECRET_KEY",
+  "INFLUXDB_URL",
+  "INFLUXDB_TOKEN",
   "NATS_URL"
 ]);
 
 const authzHandler = new AuthzHandler();
 new AuthzServer().listen(authzHandler);
+
+const influx = new InfluxDB({ url: INFLUXDB_URL!, token: INFLUXDB_TOKEN });
+// TODO: Fix hardcode value
+const fetchSingleCallByCallId = makeFetchSingleCallByCallId(influx.getQueryApi("fonoster"));
 
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
 
@@ -47,10 +54,29 @@ connect({ servers: NATS_URL, maxReconnectAttempts: -1 }).then(async (nc) => {
       logger.error(err);
     }
 
-    // TODO: Implement the add billing meter logic here
-    logger.info("received a new call request", {
-      ...msg.json()
-    });
+    const { callId } = msg.json() as { callId: string };
+
+    try {
+      const callDetails = await fetchSingleCallByCallId(callId);
+
+      if (!callDetails) {
+        logger.warn(`call details not found while processing billing event for call ${callId}`);
+        return;
+      } else if (!callDetails.status) {
+        // Call is still in progress
+        return;
+      }
+
+      const { accessKeyId, ref: identifier, duration: value } = callDetails;
+
+      await authzHandler.addBillingMeterEvent(
+        { accessKeyId, payload: { identifier, value } }
+      );
+
+      logger.verbose(`billing event processed for call ${callId}`);
+    } catch (e) {
+      logger.error(`error processing billing event for call ${callId}: ${e}`);
+    }
   };
 
   watchNatsStatus(nc);

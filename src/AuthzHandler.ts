@@ -140,14 +140,11 @@ class AuthzHandler implements IAuthzHandler {
 
     const { stripeCustomerId } = parsedUser.extended;
 
-    const { duration: value, identifier } = request.payload as {
-      identifier: string;
-      duration: string;
-    };
+    const { value, identifier } = request.payload;
 
     await addBillingMeterEvent({
       stripeCustomerId,
-      value,
+      value: `${value}`,
       identifier
     });
   }
