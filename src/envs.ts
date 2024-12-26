@@ -17,3 +17,4 @@
  * limitations under the License.
  */
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+export const NATS_URL = process.env.NATS_URL;

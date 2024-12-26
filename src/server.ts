@@ -19,11 +19,40 @@
 import { assertEnvsAreSet } from "@fonoster/common";
 import { AuthzServer } from "@fonoster/authz";
 import { AuthzHandler } from "./AuthzHandler";
+import { connect } from "nats";
+import { getLogger } from "@fonoster/logger";
+import { NATS_URL } from "./envs";
+import { ROUTR_CALL_SUBJECT } from "./consts";
+import { watchNatsStatus } from "./utils/watchNatsStatus";
 
 assertEnvsAreSet([
   "CLOAK_ENCRYPTION_KEY",
   "IDENTITY_DATABASE_URL",
-  "STRIPE_SECRET_KEY"
+  "STRIPE_SECRET_KEY",
+  "NATS_URL"
 ]);
 
-new AuthzServer().listen(new AuthzHandler());
+const authzHandler = new AuthzHandler();
+new AuthzServer().listen(authzHandler);
+
+const logger = getLogger({ service: "fnauthz", filePath: __filename });
+
+connect({ servers: NATS_URL, maxReconnectAttempts: -1 }).then(async (nc) => {
+  logger.info("connected to NATS");
+
+  const subscription = nc.subscribe(ROUTR_CALL_SUBJECT);
+
+  subscription.callback = async (err, msg) => {
+    if (err) {
+      logger.error(err);
+    }
+
+    // TODO: Implement the add billing meter logic here
+    logger.info("received a new call request", {
+      ...msg.json()
+    });
+  };
+
+  watchNatsStatus(nc);
+});
+
