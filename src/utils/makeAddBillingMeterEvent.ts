@@ -37,7 +37,7 @@ function makeAddBillingMeterEvent(stripe: StripeClient) {
       identifier
     });
 
-    logger.info("billing meter event created", { meterEvent });
+    logger.verbose("billing meter event created", { meterEvent });
   };
 }
 
