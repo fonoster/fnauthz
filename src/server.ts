@@ -55,4 +55,3 @@ connect({ servers: NATS_URL, maxReconnectAttempts: -1 }).then(async (nc) => {
 
   watchNatsStatus(nc);
 });
-
