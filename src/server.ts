@@ -16,7 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { assertEnvsAreSet, makeFetchSingleCallByCallId } from "@fonoster/common";
+import {
+  assertEnvsAreSet,
+  makeFetchSingleCallByCallId
+} from "@fonoster/common";
 import { AuthzServer } from "@fonoster/authz";
 import { AuthzHandler } from "./AuthzHandler";
 import { connect } from "nats";
@@ -40,7 +43,9 @@ new AuthzServer().listen(authzHandler);
 
 const influx = new InfluxDB({ url: INFLUXDB_URL!, token: INFLUXDB_TOKEN });
 // TODO: Fix hardcode value
-const fetchSingleCallByCallId = makeFetchSingleCallByCallId(influx.getQueryApi("fonoster"));
+const fetchSingleCallByCallId = makeFetchSingleCallByCallId(
+  influx.getQueryApi("fonoster")
+);
 
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
 
@@ -60,7 +65,9 @@ connect({ servers: NATS_URL, maxReconnectAttempts: -1 }).then(async (nc) => {
       const callDetails = await fetchSingleCallByCallId(callId);
 
       if (!callDetails) {
-        logger.warn(`call details not found while processing billing event for call ${callId}`);
+        logger.warn(
+          `call details not found while processing billing event for call ${callId}`
+        );
         return;
       } else if (!callDetails.status) {
         // Call is still in progress
@@ -69,9 +76,10 @@ connect({ servers: NATS_URL, maxReconnectAttempts: -1 }).then(async (nc) => {
 
       const { accessKeyId, ref: identifier, duration: value } = callDetails;
 
-      await authzHandler.addBillingMeterEvent(
-        { accessKeyId, payload: { identifier, value } }
-      );
+      await authzHandler.addBillingMeterEvent({
+        accessKeyId,
+        payload: { identifier, value }
+      });
 
       logger.verbose(`billing event processed for call ${callId}`);
     } catch (e) {
