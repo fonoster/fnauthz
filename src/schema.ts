@@ -40,10 +40,9 @@ const checkMethodAuthorizedRequestSchema = z.object({
 // AddBillingMeterEventRequest
 const addBillingMeterEventRequestSchema = z.object({
   accessKeyId: z.string(),
-  paylod: z.object({
+  payload: z.object({
     value: z.number(),
-    identifier: z.string(),
-    duration: z.number()
+    identifier: z.string()
   })
 });
 

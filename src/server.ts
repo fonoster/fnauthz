@@ -76,6 +76,12 @@ connect({ servers: NATS_URL, maxReconnectAttempts: -1 }).then(async (nc) => {
 
       const { accessKeyId, ref: identifier, duration: value } = callDetails;
 
+      logger.verbose(`processing billing event for call ${callId}`, {
+        accessKeyId,
+        identifier,
+        value
+      });
+
       await authzHandler.addBillingMeterEvent({
         accessKeyId,
         payload: { identifier, value }
@@ -83,6 +89,7 @@ connect({ servers: NATS_URL, maxReconnectAttempts: -1 }).then(async (nc) => {
 
       logger.verbose(`billing event processed for call ${callId}`);
     } catch (e) {
+      console.log(e);
       logger.error(`error processing billing event for call ${callId}: ${e}`);
     }
   };

@@ -10,5 +10,6 @@ services:
       INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
       LOGS_LEVEL: ${LOGS_LEVEL}
       LOGS_TRANSPORT: ${LOGS_TRANSPORT}
+      NATS_URL: ${NATS_URL}
     expose:
       - 50071:50071
