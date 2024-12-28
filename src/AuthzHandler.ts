@@ -52,7 +52,7 @@ class AuthzHandler implements IAuthzHandler {
   async checkSessionAuthorized(request: VoiceRequest): Promise<boolean> {
     logger.verbose("checkSessionAuthorized called", request);
 
-    // Checks if request at leas has the accessKeyId
+    // Checks if request at least has the accessKeyId
     const parsedRequest = voiceRequestSchema.parse(request);
 
     const user = await getUserByWorkspaceAccessKeyId(parsedRequest.accessKeyId);
@@ -91,7 +91,7 @@ class AuthzHandler implements IAuthzHandler {
     const parsedUser = userExtendedSchema.parse(user);
 
     logger.verbose("checkMethodAuthorized user extended data", {
-      extended: parsedUser.extended
+      ...parsedUser.extended
     });
 
     const { accountType, callingEnabled } = parsedUser.extended;
