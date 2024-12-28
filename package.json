@@ -28,10 +28,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@fonoster/authz": "^0.8.22",
-    "@fonoster/common": "^0.8.22",
-    "@fonoster/identity": "^0.8.22",
-    "@fonoster/logger": "^0.8.22",
+    "@fonoster/authz": "^0.8.25",
+    "@fonoster/common": "^0.8.25",
+    "@fonoster/identity": "^0.8.25",
+    "@fonoster/logger": "^0.8.24",
     "@influxdata/influxdb-client": "^1.35.0",
     "nats": "^2.28.2",
     "pb-util": "^1.0.3",
