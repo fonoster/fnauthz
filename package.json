@@ -12,7 +12,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "LOGS_LEVEL=verbose nodemon --watch src src/server.ts",
+    "start": ".scripts/start.sh",
     "prebuild": "rimraf ./dist tsconfig.tsbuildinfo",
     "build": "tsc -b tsconfig.json",
     "clean": "rimraf ./dist node_modules tsconfig.tsbuildinfo",
