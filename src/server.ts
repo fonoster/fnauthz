@@ -18,7 +18,7 @@
  */
 import {
   assertEnvsAreSet,
-  makeFetchSingleCallByCallId
+  createFetchSingleCallByCallId
 } from "@fonoster/common";
 import { AuthzServer } from "@fonoster/authz";
 import { AuthzHandler } from "./AuthzHandler";
@@ -43,7 +43,7 @@ new AuthzServer().listen(authzHandler);
 
 const influx = new InfluxDB({ url: INFLUXDB_URL!, token: INFLUXDB_TOKEN });
 // TODO: Fix hardcode value
-const fetchSingleCallByCallId = makeFetchSingleCallByCallId(
+const fetchSingleCallByCallId = createFetchSingleCallByCallId(
   influx.getQueryApi("fonoster")
 );
 

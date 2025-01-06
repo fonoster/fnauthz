@@ -25,6 +25,7 @@ import {
 } from "@fonoster/authz";
 import {
   createGetUserByWorkspaceAccessKeyId,
+  createGetUserByAccessKeyId,
   prisma
 } from "@fonoster/identity";
 import { AccountType } from "./type";
@@ -42,6 +43,7 @@ import {
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
 const getUserByWorkspaceAccessKeyId =
   createGetUserByWorkspaceAccessKeyId(prisma);
+const getUserByAccessKeyId = createGetUserByAccessKeyId(prisma);
 const getWorkspacesCount = makeGetWorkspacesCount(prisma);
 const addBillingMeterEvent = makeAddBillingMeterEvent(
   new Stripe(STRIPE_SECRET_KEY!)
@@ -81,7 +83,9 @@ class AuthzHandler implements IAuthzHandler {
     // Must have both accessKeyId and method
     const parsedRequest = checkMethodAuthorizedRequestSchema.parse(request);
 
-    const user = await getUserByWorkspaceAccessKeyId(parsedRequest.accessKeyId);
+    const user = parsedRequest.accessKeyId.startsWith("US")
+      ? await getUserByAccessKeyId(parsedRequest.accessKeyId)
+      : await getUserByWorkspaceAccessKeyId(parsedRequest.accessKeyId);
 
     if (!user) {
       return false;
