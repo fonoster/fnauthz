@@ -32,7 +32,11 @@ import { AccountType } from "./type";
 import { CREATE_CALL_METHOD, CREATE_WORKSPACE_METHOD } from "./consts";
 import { makeGetWorkspacesCount, makeAddBillingMeterEvent } from "./utils";
 import Stripe from "stripe";
-import { CLOAK_ENCRYPTION_KEY, IDENTITY_DATABASE_URL, STRIPE_SECRET_KEY } from "./envs";
+import {
+  CLOAK_ENCRYPTION_KEY,
+  IDENTITY_DATABASE_URL,
+  STRIPE_SECRET_KEY
+} from "./envs";
 import {
   addBillingMeterEventRequestSchema,
   checkMethodAuthorizedRequestSchema,
@@ -40,7 +44,10 @@ import {
   voiceRequestSchema
 } from "./schema";
 
-const prisma = createPrismaClient(IDENTITY_DATABASE_URL!, CLOAK_ENCRYPTION_KEY!);
+const prisma = createPrismaClient(
+  IDENTITY_DATABASE_URL!,
+  CLOAK_ENCRYPTION_KEY!
+);
 
 const logger = getLogger({ service: "fnauthz", filePath: __filename });
 const getUserByWorkspaceAccessKeyId =
