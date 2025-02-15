@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export const IDENTITY_DATABASE_URL = process.env.FNAUTHZ_IDENTITY_DATABASE_URL;
+export const CLOAK_ENCRYPTION_KEY = process.env.FNAUTHZ_CLOAK_ENCRYPTION_KEY;
 export const STRIPE_SECRET_KEY = process.env.FNAUTHZ_STRIPE_SECRET_KEY;
 export const NATS_URL = process.env.FNAUTHZ_NATS_URL;
 export const INFLUXDB_URL = process.env.FNAUTHZ_INFLUXDB_URL;
