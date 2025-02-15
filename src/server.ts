@@ -30,12 +30,12 @@ import { watchNatsStatus } from "./utils/watchNatsStatus";
 import { InfluxDB } from "@influxdata/influxdb-client";
 
 assertEnvsAreSet([
+  "FNAUTHZ_STRIPE_SECRET_KEY",
+  "FNAUTHZ_INFLUXDB_URL",
+  "FNAUTHZ_INFLUXDB_TOKEN",
+  "FNAUTHZ_NATS_URL",
   "CLOAK_ENCRYPTION_KEY",
-  "IDENTITY_DATABASE_URL",
-  "STRIPE_SECRET_KEY",
-  "INFLUXDB_URL",
-  "INFLUXDB_TOKEN",
-  "NATS_URL"
+  "IDENTITY_DATABASE_URL"
 ]);
 
 const authzHandler = new AuthzHandler();
