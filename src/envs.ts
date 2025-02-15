@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
-export const NATS_URL = process.env.NATS_URL;
-export const INFLUXDB_URL = process.env.INFLUXDB_URL;
-export const INFLUXDB_TOKEN = process.env.INFLUXDB_TOKEN;
+export const STRIPE_SECRET_KEY = process.env.FNAUTHZ_STRIPE_SECRET_KEY;
+export const NATS_URL = process.env.FNAUTHZ_NATS_URL;
+export const INFLUXDB_URL = process.env.FNAUTHZ_INFLUXDB_URL;
+export const INFLUXDB_TOKEN = process.env.FNAUTHZ_INFLUXDB_TOKEN;
